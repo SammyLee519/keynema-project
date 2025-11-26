@@ -1,4 +1,4 @@
-import { useRating, useAuth, userequireAuth } from "@/hooks";
+import { useRating, useAuth, useRequireAuth } from "@/hooks";
 import { useNavigate } from "react-router-dom";
 import { Typography, StarRating } from "@/components";
 import { MovieReview } from "@/pages";
@@ -20,7 +20,7 @@ import {
 const MovieRating = ({ movieId, detail, movieData }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { requireAuth } = userequireAuth();
+  const { requireAuth } = useRequireAuth();
 
   const { vote_average: voteAverage } = detail;
   const { rating, saveRating, deleteRating, loading, saving, tmdbRating } =
