@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { supabase } from "@api/supabase";
-import { useNavigate, Link } from "react-router-dom";
+import { useLogin } from "@/hooks";
+import { Link } from "react-router-dom";
 import {
   LoginContainer,
   LoginForm,
@@ -11,54 +11,20 @@ import {
   SocialButtons,
 } from "./style";
 
-export default function LoginPage() {
-  const navigate = useNavigate();
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState("");
-  const [error, setError] = useState("");
+  const { loading, error, loginWithEmail, loginWithSocial } = useLogin();
 
-  const handleEmailLogin = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-      console.log("로그인 성공:", data);
-      navigate("/");
-    } catch (error) {
-      setError(error.message);
-      console.error("로그인 오류:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSocialLogin = async (provider) => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
-      });
-      if (error) throw error;
-    } catch (error) {
-      setError(error.message);
-      console.error("소셜 로그인 오류:", error);
-    }
+    loginWithEmail(email, password);
   };
 
   return (
     <LoginContainer>
       <h1>로그인</h1>
-      <LoginForm onSubmit={handleEmailLogin}>
+      <LoginForm onSubmit={handleSubmit}>
         <Input
           type="email"
           placeholder="이메일"
@@ -86,14 +52,14 @@ export default function LoginPage() {
       <SocialButtons>
         <Button
           type="button"
-          onClick={() => handleSocialLogin("google")}
+          onClick={() => loginWithSocial("google")}
           className="social google"
         >
           Google로 로그인
         </Button>
         <Button
           type="button"
-          onClick={() => handleSocialLogin("github")}
+          onClick={() => loginWithSocial("github")}
           className="social github"
         >
           GitHub로 로그인
@@ -105,4 +71,6 @@ export default function LoginPage() {
       </p>
     </LoginContainer>
   );
-}
+};
+
+export default LoginPage;
