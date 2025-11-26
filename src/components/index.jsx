@@ -11,6 +11,7 @@ export { default as MovieGrid } from "./common/MovieGrid";
 export { default as SearchInput } from "./common/SearchInput";
 export { default as SectionTitle } from "./common/SectionTitle";
 export { default as TabMenu } from "./common/TabMenu";
+export { ProtectedRoute } from "./common/ProtectedRoute";
 
 // 단일 컴포넌트
 export { default as Header } from "./header/Header";
