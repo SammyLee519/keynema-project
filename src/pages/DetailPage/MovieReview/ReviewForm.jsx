@@ -22,7 +22,7 @@ const ReviewForm = ({
     setIsEditing,
     reviewText,
     setReviewText,
-    handleSubmit,
+    handleSubmitClick,
     handleDelete,
     handleCancel,
     getButtonText,
@@ -82,7 +82,10 @@ const ReviewForm = ({
         rows={6}
       />
       <ButtonGroup>
-        <Button onClick={handleSubmit} disabled={saving || !reviewText.trim()}>
+        <Button
+          onClick={handleSubmitClick}
+          disabled={saving || !reviewText.trim()}
+        >
           {getButtonText()}
         </Button>
         {isEditing && (

@@ -1,4 +1,4 @@
-import { useRating, useAuth } from "@/hooks";
+import { useRating, useAuth, userequireAuth } from "@/hooks";
 import { useNavigate } from "react-router-dom";
 import { Typography, StarRating } from "@/components";
 import { MovieReview } from "@/pages";
@@ -20,22 +20,19 @@ import {
 const MovieRating = ({ movieId, detail, movieData }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { requireAuth } = userequireAuth();
 
   const { vote_average: voteAverage } = detail;
   const { rating, saveRating, deleteRating, loading, saving, tmdbRating } =
     useRating({ movieId, voteAverage });
 
   const handleStarClick = async (newRating) => {
-    if (!user) {
-      showToast.warning("로그인이 필요한 서비스입니다.");
-      navigate("/login");
-      return;
-    }
-
-    const success = await saveRating(newRating);
-    if (success) {
-      showToast.success("평점이 저장되었습니다!");
-    }
+    requireAuth(async () => {
+      const success = await saveRating(newRating);
+      if (success) {
+        showToast.success("평점이 저장되었습니다!");
+      }
+    });
   };
 
   const handleDeleteRating = async () => {

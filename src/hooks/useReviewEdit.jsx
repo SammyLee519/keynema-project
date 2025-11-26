@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { requireAuth } from "@/hooks";
 import { showToast } from "@/utils";
 
 const useReviewEdit = ({
@@ -11,6 +12,8 @@ const useReviewEdit = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [reviewText, setReviewText] = useState("");
+  const { requireAuth } = useRequireAuth();
+
   useEffect(() => {
     if (myReview) {
       setReviewText(myReview.review_text);
@@ -32,6 +35,10 @@ const useReviewEdit = ({
     } else {
       showToast.error("리뷰 저장 실패!");
     }
+  };
+
+  const handleSubmitClick = () => {
+    requireAuth(() => handleSubmit());
   };
 
   const handleDelete = async () => {
@@ -67,10 +74,10 @@ const useReviewEdit = ({
     setIsEditing,
     reviewText,
     setReviewText,
-    handleSubmit,
     handleDelete,
     handleCancel,
     getButtonText,
+    handleSubmitClick,
   };
 };
 export default useReviewEdit;
