@@ -14,7 +14,6 @@ export const fetchData = async (endpoint, extraParams = {}) => {
   const response = await fetch(url, {
     headers: {
       accept: "application/json",
-      Authorization: `Bearer ${import.meta.env.VITE_OTHER_SECRET}`,
     },
   });
   if (!response.ok) {
