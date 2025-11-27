@@ -1,46 +1,36 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/api/supabase";
-import { useAuth, useRequireAuth } from "@/hooks";
+import { useAuth } from "@/hooks";
 import { showToast } from "@/utils";
 
 const useWishlist = (movieId) => {
   const { user } = useAuth();
-  const { requireAuth } = useRequireAuth();
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   // 찜 상태 확인
   useEffect(() => {
-    const fetchWishlist = async () => {
-      if (!user) {
+    const checkWishlist = async () => {
+      if (!user || !movieId) {
         setLoading(false);
         return;
       }
 
       try {
-        // movieId 있으면 해당 영화만, 없으면 전체 목록
-        if (movieId) {
-          const { data, error } = await supabase
-            .from("wishlist")
-            .select("id")
-            .eq("user_id", user.id)
-            .eq("movie_id", movieId)
-            .maybeSingle();
+        const { data, error } = await supabase
+          .from("wishlist")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("movie_id", movieId)
+          .maybeSingle();
 
-          if (error) throw error;
-          setIsWishlisted(!!data);
-        } else {
-          const { data, error } = await supabase
-            .from("wishlist")
-            .select("*")
-            .eq("user_id", user.id)
-            .order("created_at", { ascending: false });
-
-          if (error) throw error;
-          setWishlist(data || []);
+        if (error) {
+          console.error("Error checking wishlist:", error);
+          return;
         }
+
+        setIsWishlisted(!!data);
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -48,7 +38,7 @@ const useWishlist = (movieId) => {
       }
     };
 
-    fetchWishlist();
+    checkWishlist();
   }, [user, movieId]);
 
   // 찜 추가
@@ -114,11 +104,6 @@ const useWishlist = (movieId) => {
 
   // 토글 (추가 & 제거)
   const toggleWishlist = async (movieData) => {
-    if (!user) {
-      requireAuth(() => {});
-      return false;
-    }
-
     if (isWishlisted) {
       return await removeFromWishlist();
     } else {
@@ -128,7 +113,6 @@ const useWishlist = (movieId) => {
 
   return {
     isWishlisted,
-    wishlist,
     loading,
     saving,
     addToWishlist,
