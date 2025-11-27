@@ -20,7 +20,7 @@ const useLogin = () => {
         password,
       });
       if (error) throw error;
-      navigate(fronm, { replace: true });
+      navigate(from, { replace: true });
     } catch (error) {
       setError(error.message);
     } finally {
