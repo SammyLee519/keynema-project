@@ -1,4 +1,3 @@
-export { default as axiosInstance } from "./api";
 export {
   fetchData,
   fetchTopRagedMovies,
