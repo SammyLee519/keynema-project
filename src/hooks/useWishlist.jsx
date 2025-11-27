@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/api/supabase";
-import { useAuth } from "@/hooks";
+import { useAuth, useRequireAuth } from "@/hooks";
 import { showToast } from "@/utils";
 
 const useWishlist = (movieId) => {
   const { user } = useAuth();
+  const { requireAuth } = useRequireAuth();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -113,6 +114,11 @@ const useWishlist = (movieId) => {
 
   // 토글 (추가 & 제거)
   const toggleWishlist = async (movieData) => {
+    if (!user) {
+      requireAuth(() => {});
+      return false;
+    }
+
     if (isWishlisted) {
       return await removeFromWishlist();
     } else {
