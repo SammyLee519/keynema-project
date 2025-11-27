@@ -16,7 +16,7 @@ export const MenuContainer = styled.nav`
   transform: translateY(${(props) => (props.$isOpen ? "0px" : "-100%")});
   transition: transform 0.3s ease;
   z-index: 2000;
-  padding: 250px 98px 40px;
+  padding: 150px 98px 40px;
   overflow-x: auto;
 
   @media (max-width: 768px) {
