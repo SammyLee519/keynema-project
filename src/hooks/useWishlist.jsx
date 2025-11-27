@@ -6,31 +6,40 @@ import { showToast } from "@/utils";
 const useWishlist = (movieId) => {
   const { user } = useAuth();
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   // 찜 상태 확인
   useEffect(() => {
-    const checkWishlist = async () => {
-      if (!user || !movieId) {
+    const fetchWishlist = async () => {
+      if (!user) {
         setLoading(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase
-          .from("wishlist")
-          .select("id")
-          .eq("user_id", user.id)
-          .eq("movie_id", movieId)
-          .maybeSingle();
+        // movieId 있으면 해당 영화만, 없으면 전체 목록
+        if (movieId) {
+          const { data, error } = await supabase
+            .from("wishlist")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("movie_id", movieId)
+            .maybeSingle();
 
-        if (error) {
-          console.error("Error checking wishlist:", error);
-          return;
+          if (error) throw error;
+          setIsWishlisted(!!data);
+        } else {
+          const { data, error } = await supabase
+            .from("wishlist")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: false });
+
+          if (error) throw error;
+          setWishlist(data || []);
         }
-
-        setIsWishlisted(!!data);
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -38,7 +47,7 @@ const useWishlist = (movieId) => {
       }
     };
 
-    checkWishlist();
+    fetchWishlist();
   }, [user, movieId]);
 
   // 찜 추가
@@ -113,6 +122,7 @@ const useWishlist = (movieId) => {
 
   return {
     isWishlisted,
+    wishlist,
     loading,
     saving,
     addToWishlist,
