@@ -1,74 +1,56 @@
-// fetchData
-// api data 불러오기 (tmdb data 전부)
+// fetchData data 불러오기 (tmdb data 전부)
 
-import instance from "./api";
+const BASE_URL = "https://api.themoviedb.org/3";
+
+const defaultParams = {
+  api_key: import.meta.env.VITE_API_KEY,
+  language: "ko-KR",
+};
 
 export const fetchData = async (endpoint, extraParams = {}) => {
-  try {
-    const response = await instance.get(endpoint, { params: extraParams });
-    return response.data;
-  } catch (error) {
-    console.error("API 요청 중 오류 발생:", error);
-    throw error;
+  const params = new URLSearchParams({ ...defaultParams, ...extraParams });
+  const url = `${BASE_URL}${endpoint}?${params}`;
+
+  const response = await fetch(url, {
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${import.meta.env.VITE_OTHER_SECRET}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`API 요청 실패: ${response.status}`);
   }
+  return response.json();
 };
 
 // 무한스크롤 - TopRated Movie
 export const fetchTopRagedMovies = async ({ pageParam = 1 }) => {
-  try {
-    const response = await instance.get(`/movie/top_rated`, {
-      params: { page: pageParam },
-    });
-
-    const data = response.data;
-
-    return {
-      results: data.results,
-      nextPage: data.page + 1,
-      totalPages: data.total_pages,
-    };
-  } catch (error) {
-    console.error("Top Raged 요청 중 오류발생", error);
-    throw error;
-  }
-};
-
-// 무한스크롤 - Similar Movies
-export const fetchSimilarMovies = async ({ movieId, pageParam }) => {
-  try {
-    const response = await instance.get(`/movie/${movieId}/similar`, {
-      params: { page: pageParam },
-    });
-
-    const data = response.data;
-
-    return {
-      results: data.results,
-      nextPage: data.page + 1,
-      totalPages: data.total_pages,
-    };
-  } catch (error) {
-    console.error("Similar 영화 요청 중 오류 발생", error);
-    throw error;
-  }
+  const data = await fetchData("/movie/top_rated", { page: pageParam });
+  return {
+    results: data.results,
+    nextPage: data.page + 1,
+    totalPages: data.total_pages,
+  };
 };
 
 // 무한스크롤 - Popular Movie
 export const fetchPopularMovies = async ({ pageParam = 1 }) => {
-  try {
-    const response = await instance.get("/movie/popular", {
-      params: { page: pageParam },
-    });
+  const data = await fetchData("/movie/popular", { page: pageParam });
+  return {
+    results: data.results,
+    nextPage: data.page + 1,
+    totalPages: data.total_pages,
+  };
+};
 
-    const data = response.data;
-
-    return {
-      results: data.results,
-      nextPage: data.page + 1,
-      totalPages: data.total_pages,
-    };
-  } catch (error) {
-    console.error("Similar 영화 요청 중 오류 발생", error);
-    throw error;
-  }
+// 무한스크롤 - Similar Movies
+export const fetchSimilarMovies = async ({ movieId, pageParam }) => {
+  const data = await fetchData(`/movie/${movieId}/similar`, {
+    page: pageParam,
+  });
+  return {
+    results: data.results,
+    nextPage: data.page + 1,
+    totalPages: data.total_pages,
+  };
 };
