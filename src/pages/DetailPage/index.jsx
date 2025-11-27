@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { getImageUrl } from "@/constants/images";
-import { useAuth, useWishlist, useFetchData, useNoOverlay } from "@/hooks";
+import {
+  useAuth,
+  useWishlist,
+  useFetchData,
+  useNoOverlay,
+  useRequireAuth,
+} from "@/hooks";
 import { Typography, Icon } from "@/components";
 import { DETAIL_PAGE_TABS } from "./tabConfig";
 import {
@@ -22,8 +28,9 @@ import { showToast } from "@/utils";
 const Details = () => {
   useNoOverlay();
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState("info");
   const { user } = useAuth();
+  const { requireAuth } = useRequireAuth();
+  const [activeTab, setActiveTab] = useState("info");
 
   const {
     data: detail,
@@ -38,8 +45,10 @@ const Details = () => {
   const { isWishlisted, saving, toggleWishlist } = useWishlist(id);
 
   const handleWishlistClick = async () => {
-    if (!user) return showToast.error("로그인이 필요합니다.");
-
+    if (!user) {
+      requireAuth(() => {});
+      return;
+    }
     const success = await toggleWishlist(detail);
     if (success) {
       showToast.success(

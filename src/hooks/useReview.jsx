@@ -22,21 +22,31 @@ const useReview = (movieId) => {
   //전체 리뷰 불러오기
   useEffect(() => {
     const fetchReviews = async () => {
-      if (!movieId) return;
-
       try {
-        const { data, error } = await supabase
+        let query = supabase
           .from("reviews")
           .select("*")
-          .eq("movie_id", movieId)
           .order("created_at", { ascending: false });
+
+        if (movieId) {
+          //특정 영화 리뷰
+          query = query.eq("movie_id", movieId);
+        } else if (user) {
+          // 내 리뷰 전체
+          query = query.eq("user_id", user.id);
+        } else {
+          setLoading(false);
+          return;
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
 
         setReviews(data || []);
 
-        // 내 리뷰 찾기
-        if (user) {
+        // 내 리뷰 찾기(movieId 있을 떄만)
+        if (user && movieId) {
           const mine = data?.find((r) => r.user_id === user.id);
           setMyReview(mine || null);
         }
