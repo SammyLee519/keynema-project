@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetchData } from "@/hooks";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { getImageUrl } from "@/constants/images";
+import { getImageUrl } from "@/constants";
 
 import { PageContainer, SectionTitle, Typography, Icon } from "@components";
 
@@ -67,6 +67,7 @@ const TopRankedMovie = () => {
                   <Poster
                     src={getImageUrl(movie.poster_path)}
                     alt={movie.title}
+                    $rank={rank}
                   />
                 </RankingCard>
               </SwiperSlide>
