@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Typography from "./Typography";
+import { Typography } from "@/components";
 import { getImageUrl } from "@/constants/images";
 
 const Card = styled.div`
