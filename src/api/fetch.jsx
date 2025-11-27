@@ -3,7 +3,7 @@
 const BASE_URL = "https://api.themoviedb.org/3";
 
 const defaultParams = {
-  api_key: import.meta.env.VITE_TMBD_API_KEY,
+  api_key: import.meta.env.VITE_TMDB_API_KEY,
   language: "ko-KR",
 };
 
