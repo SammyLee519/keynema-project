@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Typography from "./Typography";
+import { Typography } from "@/components";
 
 const StyledButton = styled.button`
   padding: 10px 20px;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { requireAuth } from "@/hooks";
+import { useRequireAuth } from "@/hooks";
 import { showToast } from "@/utils";
 
 const useReviewEdit = ({
