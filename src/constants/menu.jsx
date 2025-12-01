@@ -6,17 +6,17 @@ export const SIDE_MENU_CATEGORIES = {
       { label: "오늘의 랭킹", path: "/top_ranked" },
     ],
   },
-  community: {
-    name: "커뮤니티",
-    items: [
-      { label: "요즘 뜨는 코멘트", path: "/community/free" },
-      { label: "KINEMA 라운지", path: "/community/review" },
-    ],
-  },
+  // community: {
+  //   name: "커뮤니티",
+  //   items: [
+  //     { label: "요즘 뜨는 코멘트", path: "/community/free" },
+  //     { label: "KINEMA 라운지", path: "/community/review" },
+  //   ],
+  // },
   mykinema: {
     name: "나의KINEMA",
     items: [
-      { label: "마이페이지", path: "/mypage" },
+      { label: "내 프로필", path: "/profile" },
       { label: "내가 찜한 영화", path: "/mypage/wishlist" },
       { label: "내가 쓴 리뷰", path: "/mypage/reviews" },
     ],
