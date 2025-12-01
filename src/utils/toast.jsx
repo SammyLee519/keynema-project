@@ -10,7 +10,7 @@ const defaultOptions = {
   theme: "dark",
   progressStyle: { background: "#ff1a66" },
   style: {
-    background: "background: rgba(255, 255, 255, 0.05)",
+    background: "rgba(255, 255, 255, 0.05)",
     border: "1px solid rgba(255, 255, 255, 0.6)",
     borderRadius: "12px",
     color: "#ff1a66",
