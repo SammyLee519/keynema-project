@@ -11,4 +11,5 @@ export { default as useReviewEdit } from "./useReviewEdit";
 export { default as useBackdropFilter } from "./useBackdropFilter";
 export { default as useSearch } from "./useSearch";
 export { default as useLogin } from "./useLogin";
+export { default as useProfile } from "./useProfile";
 export { default as useRequireAuth } from "./useRequireAuth";

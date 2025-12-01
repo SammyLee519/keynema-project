@@ -10,3 +10,6 @@ export { default as MoviRating } from "./DetailPage/MovieRating";
 export { default as MovieReview } from "./DetailPage/MovieReview/index.jsx";
 export { default as ReviewForm } from "./DetailPage/MovieReview/ReviewForm";
 export { default as ReviewItem } from "./DetailPage/MovieReview/ReviewItem";
+
+export { default as ReviewSection } from "./ProfilePage/ReviewSection";
+export { default as WishlistSection } from "./ProfilePage/WishlistSection";
